@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>Proyek Web Mobile - Ecommerce</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="Proyek Web Mobile - ECommerce">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+        <link href="plugins/fontawesome-free-5.0.1/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+        <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+        <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+        <link rel="stylesheet" type="text/css" href="plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="styles/shop_styles.css">
+        <link rel="stylesheet" type="text/css" href="styles/shop_responsive.css">
+        <script src="js/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+              var url_product = "http://localhost/web_mobile/backend/controllers/product_product_controller.php?action=read";
+              $.getJSON(url_product, function(result) {
+                  console.log(result);
+                  $.each(result, function(i, field) {
+                        console.log('FIELD', field);
+                        var sale_price = field.sale_price;
+                        sale_price =  sale_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        var display_name = field.display_name;
+                        var kanban_view_html_contain_str = '<div class="product_item">\n'+
+                            '<div class="product_border"></div>\n'+
+							'<div class="product_image d-flex flex-column align-items-center justify-content-center"><img src="images/no-thumbnail.png" alt=""></div>\n'+
+                            '<div class="product_content">\n'+
+                            '<div class="product_price">Rp. '+ sale_price +',-</div>\n'+
+                            '<div class="product_name"><div><a href="#" tabindex="0">'+ display_name +'</a></div></div>\n'+
+                            '</div>\n'+
+                            '<div class="product_fav"><i class="fas fa-heart"></i></div>\n'+
+                            '</div>\n';
+                        $('#product_ids').append(kanban_view_html_contain_str);
+                  });
+              });
+
+              var url_product_category = "http://localhost/web_mobile/backend/controllers/product_category_controller.php?action=read";
+              $.getJSON(url_product_category, function(result) {
+                  console.log(result);
+                  $.each(result, function(i, field) {
+                        var name = field.name;
+                        var navbar_html_contain_str = '<li><a class="clc" href="#">'+ name + '</a></li>';
+                        var cat_menu_html_contain_str = '<li><a href="#">'+ name + '<i class="fas fa-chevron-right"></i></a></li>';
+                        var sidebar_html_contain_str = '<li><a href="#">'+ name +'</a></li>';
+                        var footer_html_contain_str = '<li><a href="#">'+ name +'</a></li>';
+                        $("#category_ids_navbar").append(navbar_html_contain_str);
+                        $('#category_and_product_ids_cat_menu').append(cat_menu_html_contain_str);
+                        $('#category_ids_sidebar').append(sidebar_html_contain_str);
+                        $('#category_ids_footer').append(footer_html_contain_str);
+                  });
+              });
+            });
+          </script>
+    </head>
+
+    <body>
+
+    <div class="super_container">
+        <!-- Header -->
+        <header class="header">
+
+            <!-- Top Bar -->
+            <div class="top_bar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col d-flex flex-row">
+                            <div class="top_bar_contact_item"><div class="top_bar_icon"></div>+62 857 2698 4041</div>
+                            <div class="top_bar_contact_item"><div class="top_bar_icon"></div><a href="mailto:adham.hayukalbu@gmail.com">adham.hayukalbu@gmail.com</a></div>
+                            <div class="top_bar_content ml-auto">
+                                <div class="top_bar_menu">
+                                    <ul class="standard_dropdown top_bar_dropdown">
+                                        <li>
+                                            <a href="#">Indonesia<i class="fas fa-chevron-down"></i></a>
+                                            <ul>
+                                                <li><a href="#">English</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="top_bar_user">
+                                    <div class="user_icon"><img src="images/user.svg" alt=""></div>
+                                    <div><a href="#">Daftar</a></div>
+                                    <div><a href="#">Masuk</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>		
+            </div>
+
+            <!-- Header Main -->
+            <div class="header_main">
+                <div class="container">
+                    <div class="row">
+
+                        <!-- Logo -->
+                        <div class="col-lg-2 col-sm-3 col-3 order-1">
+                            <div class="logo_container">
+                                <div class="logo"><a href="#">WebMobile</a></div>
+                            </div>
+                        </div>
+
+                        <!-- Search -->
+                        <div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+                            <div class="header_search">
+                                <div class="header_search_content">
+                                    <div class="header_search_form_container">
+                                        <form action="#" class="header_search_form clearfix">
+                                            <input type="search" required="required" class="header_search_input" placeholder="Cari Produk ...">
+                                            <div class="custom_dropdown">
+                                                <div class="custom_dropdown_list">
+                                                    <span class="custom_dropdown_placeholder clc">Semua Kategori</span>
+                                                    <i class="fas fa-chevron-down"></i>
+                                                    <ul id="category_ids_navbar" class="custom_list clc"></ul>
+                                                    <!-- <ul class="custom_list clc">
+                                                        <li><a class="clc" href="#">Semua Kategori</a></li>
+                                                        <li><a class="clc" href="#">Kamera</a></li>
+                                                        <li><a class="clc" href="#">Kesehatan</a></li>
+                                                        <li><a class="clc" href="#">Komputer & Aksesoris</a></li>
+                                                        <li><a class="clc" href="#">Lainnya</a></li>
+                                                    </ul> -->
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="header_search_button trans_300" value="Cari"><img src="images/search.png" alt=""></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wishlist -->
+                        <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+                            <div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+                                <div class="wishlist d-flex flex-row align-items-center justify-content-end">
+                                    <div class="wishlist_icon"><img src="images/heart.png" alt=""></div>
+                                    <div class="wishlist_content">
+                                        <div class="wishlist_text"><a href="#">Wishlist</a></div>
+                                        <div class="wishlist_count">0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Cart -->
+                                <div class="cart">
+                                    <div class="cart_container d-flex flex-row align-items-center justify-content-end">
+                                        <div class="cart_icon">
+                                            <img src="images/cart.png" alt="">
+                                            <div class="cart_count"><span>0</span></div>
+                                        </div>
+                                        <div class="cart_content">
+                                            <div class="cart_text"><a href="#">Cart</a></div>
+                                            <div class="cart_price">Rp. 0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Navigation -->
+            <nav class="main_nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            
+                            <div class="main_nav_content d-flex flex-row">
+
+                                <!-- Categories Menu -->
+                                <div class="cat_menu_container">
+                                    <div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
+                                        <div class="cat_burger"><span></span><span></span><span></span></div>
+                                        <div class="cat_menu_text">Kategori</div>
+                                    </div>
+
+                                    <ul id="category_and_product_ids_cat_menu" class="cat_menu"></ul>
+                                    <!-- <ul class="cat_menu">
+                                        <li><a href="#">Kamera <i class="fas fa-chevron-right ml-auto"></i></a></li>
+                                        <li><a href="#">Kesehatan <i class="fas fa-chevron-right"></i></a></li>
+                                        <li class="hassubs">
+                                            <a href="#">Komputer & Aksesoris<i class="fas fa-chevron-right"></i></a>
+                                            <ul>
+                                                <li class="hassubs">
+                                                    <a href="#">PC<i class="fas fa-chevron-right"></i></a>
+                                                    <ul>
+                                                        <li><a href="#">Asus<i class="fas fa-chevron-right"></i></a></li>
+                                                        <li><a href="#">Alienware<i class="fas fa-chevron-right"></i></a></li>
+                                                        <li><a href="#">Dell<i class="fas fa-chevron-right"></i></a></li>
+                                                        <li><a href="#">Corsair<i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="#">Laptop<i class="fas fa-chevron-right"></i></a></li>
+                                                <li><a href="#">Keyboard<i class="fas fa-chevron-right"></i></a></li>
+                                                <li><a href="#">Mouse<i class="fas fa-chevron-right"></i></a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="#">Lainnya<i class="fas fa-chevron-right"></i></a></li>
+                                    </ul> -->
+                                </div>
+
+                                <!-- Main Nav Menu -->
+                                <div class="main_nav_menu ml-auto">
+                                    <ul class="standard_dropdown main_nav_dropdown">
+                                        <li><a href="#">Tentang Kami<i class="fas fa-chevron-down"></i></a></li>
+                                        <li><a href="#">Blog<i class="fas fa-chevron-down"></i></a></li>
+                                        <li><a href="#">Hubungi Kami<i class="fas fa-chevron-down"></i></a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Menu Trigger -->
+
+                                <div class="menu_trigger_container ml-auto">
+                                    <div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+                                        <div class="menu_burger">
+                                            <div class="menu_trigger_text">menu</div>
+                                            <div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Menu -->
+            <div class="page_menu">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page_menu_content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+        
+        <!-- Home -->
+
+        <div class="home">
+            <div class="home_background parallax-window" data-parallax="scroll" data-image-src="images/shop_background.jpg"></div>
+            <div class="home_overlay"></div>
+            <div class="home_content d-flex flex-column align-items-center justify-content-center">
+                <h2 class="home_title">Komputer & Aksesoris</h2>
+            </div>
+        </div>
+
+        <!-- Shop -->
+
+        <div class="shop">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+
+                        <!-- Shop Sidebar -->
+                        <div class="shop_sidebar">
+                            <div class="sidebar_section">
+                                <div class="sidebar_title">Kategori</div>
+                                <ul id="category_ids_sidebar" class="sidebar_categories">
+                                    <!-- <li><a href="#">Kamera</a></li>
+                                    <li><a href="#">Kesehetan</a></li>
+                                    <li><a href="#">Komputer & Aksesoris</a></li>
+                                    <li><a href="#">Lainnya</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-9">
+                        <!-- Shop Content -->
+                        <div class="shop_content">
+                            <div class="shop_bar clearfix">
+                                <div class="shop_product_count"><span>250</span> products found</div>
+                                <div class="shop_sorting">
+                                    <span>Sort by:</span>
+                                    <ul>
+                                        <li>
+                                            <span class="sorting_text">Rating Tertinggi<i class="fas fa-chevron-down"></span></i>
+                                            <ul>
+                                                <li class="shop_sorting_button" data-isotope-option='{"sortBy": "original-order"}'>Rating Tertinggi</li>
+                                                <li class="shop_sorting_button" data-isotope-option='{"sortBy": "name" }'>Nama</li>
+                                                <li class="shop_sorting_button"data-isotope-option='{"sortBy": "price" }'>Harga</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="product_grid">
+								<div class="product_grid_border"></div>
+
+								<!-- Product Item -->
+								<div id="product_ids">
+									<!-- <div class="product_item">
+										<div class="product_border"></div>
+										<div class="product_image d-flex flex-column align-items-center justify-content-center"><img src="images/no-thumbnail.png" alt=""></div>
+										<div class="product_content">
+											<div class="product_price">Rp 4,599,000,-</div>
+											<div class="product_name"><div><a href="#" tabindex="0">Lenovo IdeaPad</a></div></div>
+										</div>
+										<div class="product_fav"><i class="fas fa-heart"></i></div>
+									</div> -->
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="newsletter_container d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-start justify-content-center">
+                            <div class="newsletter_title_container">
+                                <div class="newsletter_icon"><img src="images/send.png" alt=""></div>
+                                <div class="newsletter_title">Berlangganan</div>
+                                <div class="newsletter_text"><p>Dapatkan potongan %20 untuk pembelian pertama.</p></div>
+                            </div>
+                            <div class="newsletter_content clearfix">
+                                <form action="#" class="newsletter_form">
+                                    <input type="email" class="newsletter_input" required="required" placeholder="Enter your email address">
+                                    <button class="newsletter_button">Berlangganan</button>
+                                </form>
+                                <div class="newsletter_unsubscribe_link"><a href="#">Berhenti</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-3 footer_col">
+                        <div class="footer_column footer_contact">
+                            <div class="logo_container">
+                                <div class="logo"><a href="#">WebMobile</a></div>
+                            </div>
+                            <div class="footer_title">Hubungi Kami</div>
+                            <div class="footer_phone">+62 857 2698 4041</div>
+                            <div class="footer_contact_text">
+                                <p>Plamongan Indah Blok I8 / 6</p>
+                                <p>Semarang, Jawa Tengah</p>
+                            </div>
+                            <div class="footer_social">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-google"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-vimeo-v"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 offset-lg-4">
+                        <div class="footer_column">
+                            <div class="footer_title">Most Popular</div>
+                            <ul id="category_ids_footer" class="footer_list"></ul>
+                            <!-- <ul class="footer_list">
+                                <li><a href="#">Komputer & Aksesoris</a></li>
+                                <li><a href="#">Kamera</a></li>
+                                <li><a href="#">Kesehatan</a></li>
+                                <li><a href="#">Lainnya</a></li>
+                            </ul> -->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <div class="footer_column">
+                            <div class="footer_title">Customer Care</div>
+                            <ul class="footer_list">
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Tentang Kami</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        
+                        <div class="copyright_container d-flex flex-sm-row flex-column align-items-center justify-content-start">
+                            <div class="copyright_content">
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | <a href="https://github.com/adhamhayukalbu/" target="_blank">Adham Hayukalbu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
